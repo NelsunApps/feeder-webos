@@ -14,6 +14,47 @@ var AppAssistant = Class.create({
     var cardStageController = this.controller.getStageController(this.mainStageName)
 
     if (parameters) {
+      
+      if (parameters.sendDataToShare !== undefined) {
+          
+          //Touch2Share requested - request url to share from whatever scene is currently displayed.
+          
+          var ttsscene = cardStageController.topScene();
+          var ttsurl;
+          var ttsdata;
+          
+          if(!ttsscene){
+              return;
+          }
+          //Query topmost scene for url
+          if(ttsscene.assistant && ttsscene.assistant.getTouch2ShareURL){
+              ttsurl = ttsscene.assistant.getTouch2ShareURL();
+          }
+          
+          if(ttsurl){
+             //url to share was returned from top scene - send to other device.
+             ttsdata = { "target": ttsurl, "type": "rawdata", "mimetype": "text/html"};
+              
+              var ttsreq = new Mojo.Service.Request(
+                  "palm://com.palm.stservice",
+                  {
+                      method: 'shareData', 
+                      parameters: { 
+                        data: ttsdata
+                      },
+                      onSuccess:function(payload){
+                        //TouchToShare data sent to other device.
+                      },
+                      onFailure:function(payload){
+                        //TouchToShare data failed to go to other device.
+                        Mojo.Log.error("handleLaunch: TouchToShare operation failed: error: " + JSON.stringify(payload));
+                      }
+                  }
+              )
+          }
+          return;
+      }
+      
       if(parameters.action == "update") {
         this.checkForUpdates()
       }
