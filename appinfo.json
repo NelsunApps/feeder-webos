@@ -8,5 +8,6 @@
   "icon": "feeder_64.png",
   "splashicon": "feeder_250.png",
   "noWindow": "true",
-  "uiRevision": 2
+  "uiRevision": 2,
+  "tapToShareSupported": true
 }
