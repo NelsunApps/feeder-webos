@@ -233,6 +233,16 @@ var ArticleAssistant = Class.create(BaseAssistant, {
     var d = new Date();
     return Math.floor(d.getTime() / 1000);
   },
+  
+  getTouch2ShareURL: function(){
+    //Method called by app TouchToShare handler.
+    //Return URL to be used during a TouchToShare event.
+    var result;
+    if(this.article.url) {
+      result = this.article.url;
+    }
+    return result;
+  },
 
   addAnchorFix: function() {
     this.anchorTap = this.anchorTap.bind(this)
